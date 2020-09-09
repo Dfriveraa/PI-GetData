@@ -22,7 +22,8 @@ while count<118:
 
         else:
             count=count+1
+            print(content)
             gesture.append(content.decode())
-gesture.to_pd(name='1test.csv')
+# gesture.to_pd(name='1test.csv')
     # print("Closing connection")
     # client.close()

@@ -2,13 +2,13 @@ class Data:
 
     def __init__(self, data: str):
         array = self.decode(data)
-        self.i = array[0]
-        self.x = array[1]
-        self.y = array[2]
-        self.z = array[3]
-        self.a = array[4]
-        self.b = array[5]
-        self.c = array[6]
+        self.i = float(array[0])
+        self.x = float(array[1])
+        self.y = float(array[2])
+        self.z = float(array[3])
+        self.a = float(array[4])
+        self.b = float(array[5])
+        self.c = float(array[6])
 
 
     def get_all_atr(self):
