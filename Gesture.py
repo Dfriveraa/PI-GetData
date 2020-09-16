@@ -9,6 +9,7 @@ class Gesture:
         self.collection = []
         self.columns = ['Tiempo', 'Contador', 'Acx', 'Acy', 'Acz', 'Gx', 'Gy', 'Gz']
         self.quality_range = 30
+        self.resume = []
 
     def append(self, data: tuple):
         dt = Data(data)
@@ -37,7 +38,7 @@ class Gesture:
         count_out = 0
         order = True
 
-        for i, j in columns[1:,:]:
+        for i, j in columns[1:, :]:
             delay = i - aux1
             if delay > self.quality_range:
                 count_out = count_out + 1
@@ -45,9 +46,10 @@ class Gesture:
             if delay > max_delay:
                 max_delay = delay
 
-            change=j-aux2
-            if (change) != 1.0 and (change)!=0.0:
+            change = j - aux2
+            if change != 1.0 and change != 0.0:
                 order = False
-            aux2=j
-            aux1=i
-        self.collection.append(['Order', order, 'Max_Delay', max_delay, 'Out_Range', count_out, '', ''])
+            aux2 = j
+            aux1 = i
+        self.resume = ['Order', order, 'Max_Delay', max_delay, 'Out_Range', count_out, '', '']
+        self.collection.append(self.resume)

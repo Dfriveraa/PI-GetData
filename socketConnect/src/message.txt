@@ -1,0 +1,111 @@
+/*
+    This sketch establishes a TCP connection to a "quote of the day" service.
+    It sends a "hello" message, and then prints received data.
+*/
+
+#include <ESP8266WiFi.h>
+#include <WiFiUdp.h>
+#include <Wire.h>
+
+#define MPU 0x68
+#ifndef STASSID
+#define STASSID "juanpablo"
+#define STAPSK  "70577893"
+#endif
+WiFiUDP Udp;
+
+
+int16_t AcX, AcY, AcZ, GyX, GyY, GyZ;
+int count = 0;
+int contador;
+int frecuencia = 60;
+unsigned long  tiempo;
+
+const char* ssid     = STASSID;
+const char* password = STAPSK;
+
+const char* host = "192.168.1.4";
+const uint16_t port = 8090;
+
+struct Data_to_be_sent {
+  uint16_t t;
+  uint16_t c;
+  int16_t AcX;
+  int16_t AcY;
+  int16_t AcZ;
+  int16_t GyX;
+  int16_t GyY;
+  int16_t GyZ;
+};
+
+Data_to_be_sent hola;
+
+void setup() {
+
+  /* Explicitly set the ESP8266 to be a WiFi-client, otherwise, it by default,
+     would try to act as both a client and an access-point and could cause
+     network-issues with your other WiFi-devices on your WiFi-network. */
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+  }
+
+
+  Wire.begin(0,2); // D2(GPIO4)=SDA / D1(GPIO5)=SCL
+  Wire.beginTransmission(MPU);
+  Wire.write(0x6B);
+  Wire.write(0);
+  Wire.endTransmission(true);
+
+
+  tiempo = millis();
+  contador = 0;
+  
+}
+
+void obtenerDatos(){
+  //Leer los valores del Acelerometro de la IMU
+  Wire.beginTransmission(MPU);
+  Wire.write(0x3B); //Pedir el registro 0x3B - corresponde al AcX
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU,6,true);   //A partir del 0x3B, se piden 6 registros
+  hola.AcX=Wire.read()<<8|Wire.read(); //Cada valor ocupa 2 registros
+  hola.AcY=Wire.read()<<8|Wire.read();
+  hola.AcZ=Wire.read()<<8|Wire.read();
+  
+  Wire.beginTransmission(MPU);
+  Wire.write(0x43);
+  Wire.endTransmission(false);
+  Wire.requestFrom(MPU,6,true);   //A partir del 0x43, se piden 6 registros
+  hola.GyX=Wire.read()<<8|Wire.read(); //Cada valor ocupa 2 registros
+  hola.GyY=Wire.read()<<8|Wire.read();
+  hola.GyZ=Wire.read()<<8|Wire.read();
+  
+  
+}
+
+ 
+void loop() {
+  if(millis() > tiempo+(1000/frecuencia) ){
+      
+    tiempo = tiempo + (1000/frecuencia);
+  
+    hola.c = count;
+    count = (count+1)%65535;
+    hola.t = millis()%65535;
+    obtenerDatos();
+    // Use WiFiClient class to create TCP connections
+
+    Udp.beginPacket(host, port);
+    Udp.write((byte *)&hola,sizeof(Data_to_be_sent));
+    Udp.endPacket();
+
+    //client.stop();
+  }
+  else{
+    delay(1);
+  }
+  
+}
