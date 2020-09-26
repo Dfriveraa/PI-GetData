@@ -26,6 +26,6 @@ while count < 185:
     gesture.append(struct.unpack('2H6h', content))
 
 print(timeit.default_timer() - start_time)
-gesture.save(name='Activacion.csv')
+gesture.save(name='Muestras-Daniel/Ruido.csv')
 print(gesture.resume)
 
