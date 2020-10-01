@@ -19,7 +19,7 @@ socket.bind(('0.0.0.0', 8090))
 count = 0
 gesture = Gesture()
 start_time = timeit.default_timer()
-while count < 185:
+while count < 300:
     timeit.default_timer() - start_time
     content = socket.recv(180)
     count = count + 1
@@ -27,6 +27,6 @@ while count < 185:
 
 #Nombre del gesto !!!
 print(timeit.default_timer() - start_time)
-gesture.save(name='GestosPablo.csv')
+gesture.save(name='Gesto.csv')
 print(gesture.resume)
 
