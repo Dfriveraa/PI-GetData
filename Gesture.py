@@ -2,9 +2,7 @@ from Data import Data
 import pandas as pd
 import numpy as np
 
-
 class Gesture:
-
     def __init__(self):
         self.collection = []
         self.columns = ['Tiempo', 'Contador', 'Acx', 'Acy', 'Acz', 'Gx', 'Gy', 'Gz']
