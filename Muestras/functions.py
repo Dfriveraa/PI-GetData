@@ -46,10 +46,11 @@ def analizar(df):
 
 def get_sample(n, df):
     sample = df[(df.index >= n * 301) & (df.index < (n + 1) * 301)]
-    print(sample)
-    print(sample.shape)
+#     print(sample)
+#     print(sample.shape)
     analizar(sample.tail(1))
-    return sample[sample.index <300].astype(float)
+    return df[(df.index >= n * 301) & (df.index < (n + 1) * 300)].astype(float).reset_index(drop=True)
+#     f.reset_index(drop=True, inplace=True)
 
 def save(data, name: str, columns):
     df = pd.DataFrame(data=data, columns=columns)
@@ -64,5 +65,3 @@ def save(data, name: str, columns):
     df.to_csv(name, index=False)
 
 
-def saludo():
-    print('Saludo')

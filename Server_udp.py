@@ -27,6 +27,6 @@ while count < 300:
 
 #Nombre del gesto !!!
 print(timeit.default_timer() - start_time)
-gesture.save(name='Muestras5s/X.csv')
+gesture.save(name='PruebaD.csv')
 print(gesture.resume)
 
