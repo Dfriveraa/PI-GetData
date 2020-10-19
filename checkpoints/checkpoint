@@ -1,0 +1,2 @@
+model_checkpoint_path: "checkpoint_sf60_bs100_nf20_#5"
+all_model_checkpoint_paths: "checkpoint_sf60_bs100_nf20_#5"
